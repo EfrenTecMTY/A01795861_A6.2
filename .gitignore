@@ -1,0 +1,15 @@
+# Cache de Python
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Cobertura de codigo
+.coverage
+htmlcov/
+
+# Ambientes virtuales
+venv/
+.env
+
+# Datos de produccion
+source/datos/
