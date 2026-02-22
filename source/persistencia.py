@@ -7,6 +7,7 @@ Created on Fri Feb 20 22:25:43 2026
 import json
 import os
 from abc import ABC, abstractmethod
+from lector_json import leer_archivo_json
 
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "datos")
@@ -34,16 +35,17 @@ class Persistencia(ABC):
         return os.path.join(DATA_DIR, self.archivo)
 
     def _cargar(self):
-        """Carga el archivo JSON y retorna el diccionario."""
-        ruta = self._ruta_archivo()
-        if not os.path.exists(ruta):
-            return {}
-        try:
-            with open(ruta, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except json.JSONDecodeError as e:
-            print(f"ERROR: Archivo {self.archivo} corrupto: {e}")
-            return {}
+        # """Carga el archivo JSON y retorna el diccionario."""
+        # ruta = self._ruta_archivo()
+        # if not os.path.exists(ruta):
+        #     return {}
+        # try:
+        #     with open(ruta, "r", encoding="utf-8") as f:
+        #         return json.load(f)
+        # except json.JSONDecodeError as e:
+        #     print(f"ERROR: Archivo {self.archivo} corrupto: {e}")
+        #     return {}
+        return leer_archivo_json(self.archivo, DATA_DIR)
 
     def _guardar(self, datos):
         """Guarda el diccionario en el archivo JSON."""

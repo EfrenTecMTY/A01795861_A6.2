@@ -21,7 +21,6 @@ import json
 import unittest
 from unittest.mock import patch
 
-
 import persistencia
 from catalogos import ClasificacionHotel
 from hotel import Hotel
@@ -336,6 +335,105 @@ class TestHotelCargar(unittest.TestCase):
             self.assertTrue(
                 any("ERROR" in c for c in llamadas)
             )
+
+
+class TestHotelBuscar(unittest.TestCase):
+    """Pruebas para Hotel.buscar."""
+
+    def setUp(self):
+        persistencia.DATA_DIR = TEST_DATA_DIR
+        os.makedirs(TEST_DATA_DIR, exist_ok=True)
+        if os.path.exists(ARCHIVO_TEST):
+            os.remove(ARCHIVO_TEST)
+        Hotel.crear(datos_hotel_valido())
+
+    def tearDown(self):
+        if os.path.exists(ARCHIVO_TEST):
+            os.remove(ARCHIVO_TEST)
+
+    def test_buscar_hotel_existente(self):
+        """Verifica que buscar retorna dict del hotel existente."""
+        resultado = Hotel.buscar("CAM123456ABC")
+        self.assertIsNotNone(resultado)
+        self.assertEqual(resultado["rfc"], "CAM123456ABC")
+
+    def test_buscar_hotel_inexistente(self):
+        """Verifica que buscar retorna None si no existe."""
+        resultado = Hotel.buscar("RFC_INEXISTENTE")
+        self.assertIsNone(resultado)
+
+    def test_buscar_sin_archivo_retorna_none(self):
+        """Verifica que buscar retorna None sin archivo."""
+        os.remove(ARCHIVO_TEST)
+        resultado = Hotel.buscar("CAM123456ABC")
+        self.assertIsNone(resultado)
+
+
+class TestHotelReservarCuarto(unittest.TestCase):
+    """Pruebas para Hotel.reservar_cuarto."""
+
+    def setUp(self):
+        persistencia.DATA_DIR = TEST_DATA_DIR
+        os.makedirs(TEST_DATA_DIR, exist_ok=True)
+        if os.path.exists(ARCHIVO_TEST):
+            os.remove(ARCHIVO_TEST)
+        self.hotel = Hotel.crear(datos_hotel_valido())
+
+    def tearDown(self):
+        if os.path.exists(ARCHIVO_TEST):
+            os.remove(ARCHIVO_TEST)
+
+    def test_reservar_cuarto_delega_a_bridge(self):
+        """Verifica que reservar_cuarto delega a crear_reservacion."""
+        with patch(
+            "hotel.crear_reservacion"
+        ) as mock_crear:
+            mock_crear.return_value = "reservacion_mock"
+            datos = {"rfc_hotel": "CAM123456ABC"}
+            resultado = self.hotel.reservar_cuarto(datos)
+            mock_crear.assert_called_once_with(datos)
+            self.assertEqual(resultado, "reservacion_mock")
+
+    def test_reservar_cuarto_retorna_resultado_bridge(self):
+        """Verifica que reservar_cuarto retorna lo que retorna el bridge."""
+        with patch("hotel.crear_reservacion") as mock_crear:
+            mock_crear.return_value = None
+            resultado = self.hotel.reservar_cuarto({})
+            self.assertIsNone(resultado)
+
+
+class TestHotelCancelarReservacion(unittest.TestCase):
+    """Pruebas para Hotel.cancelar_reservacion."""
+
+    def setUp(self):
+        persistencia.DATA_DIR = TEST_DATA_DIR
+        os.makedirs(TEST_DATA_DIR, exist_ok=True)
+        if os.path.exists(ARCHIVO_TEST):
+            os.remove(ARCHIVO_TEST)
+        self.hotel = Hotel.crear(datos_hotel_valido())
+
+    def tearDown(self):
+        if os.path.exists(ARCHIVO_TEST):
+            os.remove(ARCHIVO_TEST)
+
+    def test_cancelar_reservacion_delega_a_bridge(self):
+        """Verifica que cancelar_reservacion delega a cancelar_reservacion."""
+        with patch(
+            "hotel.cancelar_reservacion"
+        ) as mock_cancelar:
+            mock_cancelar.return_value = True
+            reservacion_mock = unittest.mock.MagicMock()
+            resultado = self.hotel.cancelar_reservacion(reservacion_mock)
+            mock_cancelar.assert_called_once_with(reservacion_mock)
+            self.assertTrue(resultado)
+
+    def test_cancelar_reservacion_retorna_false_si_falla(self):
+        """Verifica que retorna False si el bridge retorna False."""
+        with patch("hotel.cancelar_reservacion") as mock_cancelar:
+            mock_cancelar.return_value = False
+            reservacion_mock = unittest.mock.MagicMock()
+            resultado = self.hotel.cancelar_reservacion(reservacion_mock)
+            self.assertFalse(resultado)
 
 
 if __name__ == "__main__":
