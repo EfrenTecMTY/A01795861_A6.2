@@ -1,0 +1,21 @@
+{
+    "uuid-test-reservacion-0001": {
+        "uuid": "uuid-test-reservacion-0001",
+        "referencias": {
+            "rfc_hotel": "CAM123456ABC",
+            "rfc_cliente": "PEJJ800101ABC",
+            "fecha": "2026-03-01",
+            "nemotecnica": "CAM123456ABC_PEJJ800101ABC_2026-03-01"
+        },
+        "noches": 3,
+        "detalle": [
+            {
+                "tipo": "DOBLE",
+                "cantidad": 2,
+                "costo": 1500.00
+            }
+        ],
+        "importe": 9000.00,
+        "es_pagado": false
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "PEJJ800101ABC": {
+        "nombre": "Juan Pérez",
+        "rfc": "PEJJ800101ABC",
+        "sexo": "M",
+        "compania": "Empresa SA",
+        "forma_pago": "tarjeta",
+        "estatus": "activo"
+    }
+}

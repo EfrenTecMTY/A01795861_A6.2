@@ -44,7 +44,7 @@ def ejecutar(herramienta, cmd, archivo):
     salida = resultado.stdout + resultado.stderr
     if salida.strip():
         print(f"\n{SEP_RESULT}")
-        print(f"{herramienta.upper()} → {archivo}")
+        print(f"{herramienta.upper()} -> {archivo}")
         print(SEP_RESULT)
         print(salida)
     else:

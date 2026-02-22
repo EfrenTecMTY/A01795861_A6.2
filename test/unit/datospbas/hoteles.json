@@ -1,0 +1,11 @@
+{
+    "CAM123456ABC": {
+        "nombre": "Hotel Camino Real",
+        "nombre_fiscal": "Camino Real SA de CV",
+        "rfc": "CAM123456ABC",
+        "direccion": "Av. Principal 100",
+        "estado": "Jalisco",
+        "clasificacion": "5E",
+        "estatus": "activo"
+    }
+}

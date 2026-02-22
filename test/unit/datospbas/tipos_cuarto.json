@@ -1,0 +1,12 @@
+{
+    "CAM123456ABC_DOBLE": {
+        "rfc_hotel": "CAM123456ABC",
+        "tipo": "DOBLE",
+        "costo": 1500.00
+    },
+    "CAM123456ABC_SUITE": {
+        "rfc_hotel": "CAM123456ABC",
+        "tipo": "SUITE",
+        "costo": 3000.00
+    }
+}
