@@ -6,6 +6,7 @@ Created on Fri Feb 20 21:54:43 2026
 """
 
 
+# source/tipo_cuarto.py
 from catalogos import TipoHabitacion
 from persistencia import Persistencia
 
@@ -20,13 +21,29 @@ class TipoCuarto(Persistencia):
         try:
             self.rfc_hotel = datos["rfc_hotel"]
             self.tipo = TipoHabitacion(datos["tipo"])
-            self.costo = datos["costo"]
+            self.costo = self._validar_costo(datos["costo"])
         except KeyError as e:
             print(f"ERROR: Campo requerido faltante: {e}")
             raise
         except ValueError as e:
-            print(f"ERROR: Tipo de habitacion invalido: {e}")
+            print(f"ERROR: Valor invalido: {e}")
             raise
+
+    # ------------------------------------------------------------------
+    # Metodos privados
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _validar_costo(costo):
+        """Valida que el costo sea mayor a cero.
+
+        Lanza ValueError si el costo es cero o negativo.
+        """
+        if costo <= 0:
+            raise ValueError(
+                f"El costo debe ser mayor a cero, se recibio: {costo}"
+            )
+        return costo
 
     # ------------------------------------------------------------------
     # Implementacion de propiedades abstractas
@@ -120,6 +137,8 @@ class TipoCuarto(Persistencia):
             if campo not in campos_validos:
                 print(f"ERROR: Atributo '{campo}' no es modificable.")
                 continue
+            if campo == "costo":
+                valor = self._validar_costo(valor)
             setattr(self, campo, valor)
             archivo[self.id][campo] = valor
         self._guardar(archivo)
