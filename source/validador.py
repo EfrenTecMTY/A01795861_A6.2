@@ -35,5 +35,6 @@ def aplicar_costos_catalogo(rfc_hotel, detalle):
     """Aplica costos del catalogo oficial al detalle de la reservacion."""
     for item in detalle:
         tc = TipoCuarto.buscar(rfc_hotel, item["tipo"])
-        item["costo"] = tc["costo"]
+        if tc is not None:
+            item["costo"] = tc["costo"]
     return detalle

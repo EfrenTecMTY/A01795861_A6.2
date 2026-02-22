@@ -4,9 +4,6 @@ Created on Fri Feb 20 21:54:43 2026
 
 @author: Efrén Alejandro
 """
-
-
-# source/tipo_cuarto.py
 from catalogos import TipoHabitacion
 from persistencia import Persistencia
 
@@ -16,7 +13,6 @@ ARCHIVO_TIPOS_CUARTO = "tipos_cuarto.json"
 
 class TipoCuarto(Persistencia):
     """Catalogo de tipos de cuarto por hotel."""
-
     def __init__(self, datos: dict):
         try:
             self.rfc_hotel = datos["rfc_hotel"]
@@ -32,18 +28,9 @@ class TipoCuarto(Persistencia):
     # ------------------------------------------------------------------
     # Metodos privados
     # ------------------------------------------------------------------
-    @classmethod
-    def buscar(cls, rfc_hotel, tipo):
-        """Busca un tipo de cuarto, retorna dict o None si no existe."""
-        tc_temp = cls.__new__(cls)
-        tc_temp.rfc_hotel = rfc_hotel
-        archivo = tc_temp._cargar()
-        return archivo.get(f"{rfc_hotel}_{tipo}")
-
     @staticmethod
     def _validar_costo(costo):
         """Valida que el costo sea mayor a cero.
-
         Lanza ValueError si el costo es cero o negativo.
         """
         if costo <= 0:
@@ -55,7 +42,6 @@ class TipoCuarto(Persistencia):
     # ------------------------------------------------------------------
     # Implementacion de propiedades abstractas
     # ------------------------------------------------------------------
-
     @property
     def archivo(self):
         """Archivo JSON donde se persisten los tipos de cuarto."""
@@ -77,11 +63,17 @@ class TipoCuarto(Persistencia):
     # ------------------------------------------------------------------
     # Metodos de clase
     # ------------------------------------------------------------------
+    @classmethod
+    def buscar(cls, rfc_hotel, tipo):
+        """Busca un tipo de cuarto, retorna dict o None si no existe."""
+        tc_temp = cls.__new__(cls)
+        tc_temp.rfc_hotel = rfc_hotel
+        archivo = tc_temp._cargar()
+        return archivo.get(f"{rfc_hotel}_{tipo}")
 
     @classmethod
     def crear(cls, datos: dict):
         """Crea un tipo de cuarto y lo persiste en archivo.
-
         Si ya existe el mismo tipo para el mismo hotel muestra error
         en consola y continua la ejecucion sin crear duplicado.
         """
@@ -100,7 +92,6 @@ class TipoCuarto(Persistencia):
     @classmethod
     def eliminar(cls, rfc_hotel, tipo):
         """Elimina un tipo de cuarto del archivo.
-
         Si no existe muestra error en consola y continua la ejecucion.
         """
         tipo_cuarto = cls.__new__(cls)
@@ -121,7 +112,6 @@ class TipoCuarto(Persistencia):
     # ------------------------------------------------------------------
     # Metodos de instancia
     # ------------------------------------------------------------------
-
     def mostrar_info(self):
         """Muestra la informacion del tipo de cuarto en consola."""
         print("-" * 40)
@@ -132,7 +122,6 @@ class TipoCuarto(Persistencia):
 
     def modificar(self, **kwargs):
         """Modifica los atributos del tipo de cuarto y actualiza archivo.
-
         Atributos no modificables: rfc_hotel y tipo (son la llave unica).
         """
         campos_validos = {"costo"}

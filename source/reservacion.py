@@ -19,19 +19,9 @@ ARCHIVO_RESERVACIONES = "reservaciones.json"
 
 class Reservacion(Persistencia):
     """Representa una reservacion de hotel."""
-
     def __init__(self, datos: dict):
         try:
-            self.referencias = {
-                "rfc_hotel": datos["rfc_hotel"],
-                "rfc_cliente": datos["rfc_cliente"],
-                "fecha": datos["fecha"],
-                "nemotecnica": datos.get(
-                    "nemotecnica",
-                    f"{datos['rfc_hotel']}_{datos['rfc_cliente']}"
-                    f"_{datos['fecha']}"
-                )
-            }
+            self.referencias = datos["referencias"]
             self.noches = self._validar_detalle(
                 datos["detalle"], datos["noches"]
             )
@@ -49,11 +39,9 @@ class Reservacion(Persistencia):
     # ------------------------------------------------------------------
     # Metodos privados
     # ------------------------------------------------------------------
-
     @staticmethod
     def _validar_detalle(detalle, noches):
         """Valida detalle y noches de la reservacion.
-
         Lanza ValueError si noches es cero o negativo, detalle esta
         vacio, o cantidad de algun item es invalida.
         """
@@ -81,7 +69,6 @@ class Reservacion(Persistencia):
     # ------------------------------------------------------------------
     # Implementacion de propiedades abstractas
     # ------------------------------------------------------------------
-
     @property
     def archivo(self):
         """Archivo JSON donde se persisten las reservaciones."""
@@ -117,7 +104,6 @@ class Reservacion(Persistencia):
     @classmethod
     def buscar_por_referencia(cls, nemotecnica):
         """Busca una reservacion por referencia nemotecnica.
-        
         Retorna dict o None si no existe.
         """
         res_temp = cls.__new__(cls)
@@ -131,7 +117,6 @@ class Reservacion(Persistencia):
     @classmethod
     def crear(cls, datos: dict):
         """Crea una reservacion y la persiste en archivo.
-
         Valida existencia de hotel, cliente y tipos de cuarto.
         Aplica costos del catalogo al momento de crear.
         Calcula el importe automaticamente.
@@ -151,6 +136,14 @@ class Reservacion(Persistencia):
             datos["detalle"], datos["noches"]
         )
         datos["es_pagado"] = datos.get("es_pagado", False)
+        datos["referencias"] = {
+            "rfc_hotel": datos["rfc_hotel"],
+            "rfc_cliente": datos["rfc_cliente"],
+            "fecha": datos["fecha"],
+            "nemotecnica": (
+                f"{datos['rfc_hotel']}_{datos['rfc_cliente']}_{datos['fecha']}"
+            )
+        }
         reservacion = cls(datos)
         archivo = reservacion._cargar()
         archivo[reservacion.uuid] = reservacion._a_dict()
@@ -160,10 +153,8 @@ class Reservacion(Persistencia):
     # ------------------------------------------------------------------
     # Metodos de instancia
     # ------------------------------------------------------------------
-
     def cancelar(self):
         """Cancela la reservacion eliminandola del archivo.
-
         Muestra error en consola si no existe y continua la ejecucion.
         """
         archivo = self._cargar()

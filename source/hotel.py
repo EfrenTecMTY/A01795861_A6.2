@@ -6,6 +6,7 @@ Created on Fri Feb 20 21:47:30 2026
 """
 from catalogos import ClasificacionHotel
 from persistencia import Persistencia
+from reservacion_bridge import crear_reservacion, cancelar_reservacion
 
 
 ARCHIVO_HOTELES = "hoteles.json"
@@ -49,8 +50,7 @@ class Hotel(Persistencia):
             "direccion": self.direccion,
             "estado": self.estado,
             "clasificacion": self.clasificacion.value,
-            "estatus": self.estatus,
-            "reservaciones": []
+            "estatus": self.estatus
         }
 
     @classmethod
@@ -64,7 +64,6 @@ class Hotel(Persistencia):
     @classmethod
     def crear(cls, datos: dict):
         """Crea un hotel y lo persiste en archivo.
-
         Si ya existe un hotel con el mismo RFC muestra error en consola
         y continua la ejecucion sin crear duplicado.
         """
@@ -80,7 +79,6 @@ class Hotel(Persistencia):
     @classmethod
     def eliminar(cls, rfc):
         """Elimina un hotel del archivo por RFC.
-
         Si no existe el hotel muestra error en consola
         y continua la ejecucion.
         """
@@ -108,7 +106,6 @@ class Hotel(Persistencia):
 
     def modificar(self, **kwargs):
         """Modifica los atributos del hotel y actualiza el archivo.
-
         Atributo no modificable: rfc (es la llave unica).
         """
         campos_validos = {
@@ -130,29 +127,10 @@ class Hotel(Persistencia):
         self._guardar(archivo)
         return True
 
-    def reservar_cuarto(self, reservacion):
-        """Registra una reservacion en el archivo del hotel.
-
-        Si ya existe una reservacion con el mismo id muestra error
-        y continua la ejecucion.
-        """
-        archivo = self._cargar()
-        if self.rfc not in archivo:
-            print(f"ERROR: Hotel con RFC {self.rfc} no encontrado.")
-            return False
-        reservaciones = archivo[self.rfc].get("reservaciones", [])
-        if reservacion.id in [r["id"] for r in reservaciones]:
-            print(
-                f"ERROR: Ya existe reservacion con id {reservacion.id}."
-            )
-            return False
-        reservaciones.append({"id": reservacion.id})
-        archivo[self.rfc]["reservaciones"] = reservaciones
-        self._guardar(archivo)
-        return True
+    def reservar_cuarto(self, datos_reservacion):
+        """Crea una reservacion para el hotel."""
+        return crear_reservacion(datos_reservacion)
 
     def cancelar_reservacion(self, reservacion):
-        """
-        Cancela una reservacion del hotel en el archivo.
-        """
-        return reservacion.cancelar()
+        """Cancela una reservacion del hotel."""
+        return cancelar_reservacion(reservacion)
