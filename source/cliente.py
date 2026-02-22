@@ -55,6 +55,13 @@ class Cliente(Persistencia):
     # ------------------------------------------------------------------
     # Metodos de clase
     # ------------------------------------------------------------------
+    @classmethod
+    def buscar(cls, rfc):
+        """Busca un cliente por RFC, retorna dict o None si no existe."""
+        cliente_temp = cls.__new__(cls)
+        cliente_temp.rfc = rfc
+        archivo = cliente_temp._cargar()
+        return archivo.get(rfc)
 
     @classmethod
     def crear(cls, datos: dict):

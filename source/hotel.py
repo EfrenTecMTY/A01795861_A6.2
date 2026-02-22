@@ -54,6 +54,14 @@ class Hotel(Persistencia):
         }
 
     @classmethod
+    def buscar(cls, rfc):
+        """Busca un hotel por RFC, retorna dict o None si no existe."""
+        hotel_temp = cls.__new__(cls)
+        hotel_temp.rfc = rfc
+        archivo = hotel_temp._cargar()
+        return archivo.get(rfc)
+
+    @classmethod
     def crear(cls, datos: dict):
         """Crea un hotel y lo persiste en archivo.
 
@@ -144,22 +152,7 @@ class Hotel(Persistencia):
         return True
 
     def cancelar_reservacion(self, reservacion):
-        """Cancela una reservacion del hotel en el archivo.
-
-        Si no existe la reservacion muestra error y continua la ejecucion.
         """
-        archivo = self._cargar()
-        if self.rfc not in archivo:
-            print(f"ERROR: Hotel con RFC {self.rfc} no encontrado.")
-            return False
-        reservaciones = archivo[self.rfc].get("reservaciones", [])
-        nuevas = [r for r in reservaciones if r["id"] != reservacion.id]
-        if len(nuevas) == len(reservaciones):
-            print(
-                f"ERROR: No existe reservacion con id {reservacion.id} "
-                f"en hotel {self.rfc}."
-            )
-            return False
-        archivo[self.rfc]["reservaciones"] = nuevas
-        self._guardar(archivo)
-        return True
+        Cancela una reservacion del hotel en el archivo.
+        """
+        return reservacion.cancelar()

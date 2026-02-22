@@ -32,6 +32,13 @@ class TipoCuarto(Persistencia):
     # ------------------------------------------------------------------
     # Metodos privados
     # ------------------------------------------------------------------
+    @classmethod
+    def buscar(cls, rfc_hotel, tipo):
+        """Busca un tipo de cuarto, retorna dict o None si no existe."""
+        tc_temp = cls.__new__(cls)
+        tc_temp.rfc_hotel = rfc_hotel
+        archivo = tc_temp._cargar()
+        return archivo.get(f"{rfc_hotel}_{tipo}")
 
     @staticmethod
     def _validar_costo(costo):
