@@ -7,9 +7,7 @@ Created on Fri Feb 20 21:51:12 2026
 
 
 from persistencia import Persistencia
-
-
-ARCHIVO_CLIENTES = "clientes.json"
+from config import ARCHIVO_CLIENTES, SEPARADOR
 
 
 class Cliente(Persistencia):
@@ -102,14 +100,14 @@ class Cliente(Persistencia):
 
     def mostrar_info(self):
         """Muestra la informacion del cliente en consola."""
-        print("-" * 40)
+        print(SEPARADOR)
         print(f"Nombre:      {self.nombre}")
         print(f"RFC:         {self.rfc}")
         print(f"Sexo:        {self.sexo}")
         print(f"Compania:    {self.compania}")
         print(f"Forma Pago:  {self.forma_pago}")
         print(f"Estatus:     {self.estatus}")
-        print("-" * 40)
+        print(SEPARADOR)
 
     def modificar(self, **kwargs):
         """Modifica los atributos del cliente y actualiza el archivo.

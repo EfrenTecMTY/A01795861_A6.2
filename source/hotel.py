@@ -7,9 +7,7 @@ Created on Fri Feb 20 21:47:30 2026
 from catalogos import ClasificacionHotel
 from persistencia import Persistencia
 from reservacion_bridge import crear_reservacion, cancelar_reservacion
-
-
-ARCHIVO_HOTELES = "hoteles.json"
+from config import ARCHIVO_HOTELES, SEPARADOR
 
 
 class Hotel(Persistencia):
@@ -94,7 +92,7 @@ class Hotel(Persistencia):
 
     def mostrar_info(self):
         """Muestra la informacion del hotel en consola."""
-        print("-" * 40)
+        print(SEPARADOR)
         print(f"Nombre:         {self.nombre}")
         print(f"Nombre Fiscal:  {self.nombre_fiscal}")
         print(f"RFC:            {self.rfc}")
@@ -102,7 +100,7 @@ class Hotel(Persistencia):
         print(f"Estado:         {self.estado}")
         print(f"Clasificacion:  {self.clasificacion.value}")
         print(f"Estatus:        {self.estatus}")
-        print("-" * 40)
+        print(SEPARADOR)
 
     def modificar(self, **kwargs):
         """Modifica los atributos del hotel y actualiza el archivo.

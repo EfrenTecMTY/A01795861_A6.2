@@ -12,9 +12,7 @@ from validador import (
     validar_tipos_cuarto,
     aplicar_costos_catalogo
 )
-
-
-ARCHIVO_RESERVACIONES = "reservaciones.json"
+from config import ARCHIVO_RESERVACIONES, SEPARADOR
 
 
 class Reservacion(Persistencia):
@@ -169,7 +167,7 @@ class Reservacion(Persistencia):
 
     def mostrar_info(self):
         """Muestra la informacion de la reservacion en consola."""
-        print("-" * 40)
+        print(SEPARADOR)
         print(f"UUID:        {self.uuid}")
         print(f"Referencia:  {self.referencias['nemotecnica']}")
         print(f"Hotel RFC:   {self.referencias['rfc_hotel']}")
@@ -178,11 +176,11 @@ class Reservacion(Persistencia):
         print(f"Noches:      {self.noches}")
         print(f"Importe:     {self.importe}")
         print(f"Pagado:      {self.es_pagado}")
-        print("-" * 40)
+        print(SEPARADOR)
         for item in self.detalle:
             print(
                 f"  Tipo: {item['tipo']} | "
                 f"Cantidad: {item['cantidad']} | "
                 f"Costo: {item['costo']}"
             )
-        print("-" * 40)
+        print(SEPARADOR)

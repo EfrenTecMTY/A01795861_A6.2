@@ -6,9 +6,7 @@ Created on Fri Feb 20 21:54:43 2026
 """
 from catalogos import TipoHabitacion
 from persistencia import Persistencia
-
-
-ARCHIVO_TIPOS_CUARTO = "tipos_cuarto.json"
+from config import ARCHIVO_TIPOS_CUARTO, SEPARADOR
 
 
 class TipoCuarto(Persistencia):
@@ -114,11 +112,11 @@ class TipoCuarto(Persistencia):
     # ------------------------------------------------------------------
     def mostrar_info(self):
         """Muestra la informacion del tipo de cuarto en consola."""
-        print("-" * 40)
+        print(SEPARADOR)
         print(f"Hotel RFC:  {self.rfc_hotel}")
         print(f"Tipo:       {self.tipo.value}")
         print(f"Costo:      {self.costo}")
-        print("-" * 40)
+        print(SEPARADOR)
 
     def modificar(self, **kwargs):
         """Modifica los atributos del tipo de cuarto y actualiza archivo.
